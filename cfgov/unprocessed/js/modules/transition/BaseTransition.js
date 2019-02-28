@@ -41,8 +41,13 @@ function BaseTransition( element, classes ) {
   /**
    * Set the HTML element target of this transition.
    * @param {HTMLNode} elem - The target of the transition.
+   * @throws {Error} If element does not exist.
    */
   function setElement( elem ) {
+    if ( !elem ) {
+      const msg = 'Element does not exist!';
+      throw new Error( msg );
+    }
 
     /* If the element has already been set,
        clear the transition classes from the old element. */
@@ -113,7 +118,7 @@ function BaseTransition( element, classes ) {
   function _addEventListener() {
     _dom.classList.add( BaseTransition.ANIMATING_CLASS );
     _isAnimating = true;
-    // If transition is not supported, call handler directly (IE9/OperaMini).
+    // If transition is not supported, call handler directly (e.g. OperaMini).
     if ( _transitionEndEvent ) {
       _dom.addEventListener(
         _transitionEndEvent,
@@ -204,31 +209,14 @@ function BaseTransition( element, classes ) {
   /**
    * @param {HTMLNode} elem
    *   The element to check for support of transition end event.
-   * @returns {string} The browser-prefixed transition end event.
+   * @returns {string|undefined}
+   *   'transitionend' event or undefined if that is unsupported.
    */
   function _getTransitionEndEvent( elem ) {
-    if ( !elem ) {
-      const msg = 'Element does not have TransitionEnd event. It may be null!';
-      throw new Error( msg );
+    if ( typeof elem.style.transition === 'undefined' ) {
+      return;
     }
-
-    let transition;
-    const transitions = {
-      WebkitTransition: 'webkitTransitionEnd',
-      MozTransition:    'transitionend',
-      OTransition:      'oTransitionEnd otransitionend',
-      transition:       'transitionend'
-    };
-
-    let t;
-    for ( t in transitions ) {
-      if ( transitions.hasOwnProperty( t ) &&
-           typeof elem.style[t] !== 'undefined' ) {
-        transition = transitions[t];
-        break;
-      }
-    }
-    return transition;
+    return 'transitionend';
   }
 
   // Attach public events.
