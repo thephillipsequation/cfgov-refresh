@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+
+import datetime
 import os
 
 from django.contrib.auth.models import User
@@ -19,6 +22,7 @@ AUDIENCE_MAPPING = {
 
 
 def run():
+    starter = datetime.datetime.now()
     migration_user_pk = os.getenv('MIGRATION_USER_PK', 9999)
     user = User.objects.filter(id=migration_user_pk).first()
     for next_step in NextStep.objects.all():
@@ -27,6 +31,8 @@ def run():
             text=next_step.text)
 
     for page in AnswerPage.objects.all():
+        pre_status = page.status_string
+        page.get_latest_revision().publish()
         for category in page.answer_base.category.all():
             page.category.add(category)
         for subcategory in page.answer_base.subcategory.all():
@@ -60,8 +66,8 @@ def run():
             for related_question in page.answer_base.related_questions.all():
                 page.related_questions.add(related_question.english_page)
 
-        if page.status_string != 'draft':
-            # We need to publish for the answer ID, next step, and search tags
-            page.save_revision(user=user).publish()
-        else:
-            page.save_revision(user=user)
+        # We need to publish again for the answer ID, next step and search tags
+        page.save_revision(user=user).publish()
+        if pre_status == 'draft':
+            page.unpublish()
+    print("Script took {} to run.".format(datetime.datetime.now() - starter))
