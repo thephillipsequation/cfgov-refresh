@@ -5,7 +5,7 @@ from wagtail.wagtailcore.models import PageManager
 from wagtail.wagtailsearch import index
 
 from v1 import blocks as v1_blocks
-from v1.atomic_elements import organisms
+from v1.atomic_elements import molecules, organisms
 from v1.feeds import get_appropriate_rss_feed_url_for_page
 from v1.models.base import CFGOVPageManager
 from v1.models.learn_page import AbstractFilterPage
@@ -13,6 +13,7 @@ from v1.models.learn_page import AbstractFilterPage
 
 class BlogPage(AbstractFilterPage):
     content = StreamField([
+        ('notification', molecules.Notification()),
         ('full_width_text', organisms.FullWidthText()),
         ('info_unit_group', organisms.InfoUnitGroup()),
         ('expandable', organisms.Expandable()),

@@ -13,6 +13,13 @@
         {% if block.block_type == 'item_introduction' %}
             {% import 'organisms/item-introduction.html' as item_introduction with context %}
             {{ item_introduction.render(block.value) }}
+        {% elif block.block_type == 'notification' %}
+            <div class="block
+                        block__flush-top
+                        block__flush-bottom
+                        block__padded-bottom">
+                {% include_block block %}
+            </div>
         {% else %}
             <div class="block
                         block__flush-top">

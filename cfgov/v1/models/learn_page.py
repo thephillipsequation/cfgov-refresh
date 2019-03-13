@@ -25,6 +25,7 @@ from v1.models.base import CFGOVPage, CFGOVPageManager
 class AbstractFilterPage(CFGOVPage):
     header = StreamField([
         ('article_subheader', blocks.RichTextBlock(icon='form')),
+        ('notification', molecules.Notification()),
         ('text_introduction', molecules.TextIntroduction()),
         ('item_introduction', organisms.ItemIntroduction()),
     ], blank=True)

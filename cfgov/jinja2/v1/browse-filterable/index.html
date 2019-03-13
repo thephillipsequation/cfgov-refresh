@@ -26,6 +26,13 @@
             <div class="block block__flush-top">
                 {% include_block block %}
             </div>
+        {% elif block.block_type == 'notification' %}
+            <div class="block
+                        block__flush-top
+                        block__flush-bottom
+                        block__padded-bottom">
+                {% include_block block %}
+            </div>
         {% elif block.block_type == 'feedback' %}
             {{- form_block.render(block, 'content', loop.index0) -}}
         {% else %}

@@ -18,7 +18,14 @@
 
 {% block content_main %}
     {% for block in page.header -%}
-        {% if block.block_type != 'hero' %}
+        {% if block.block_type == 'notification' %}
+            <div class="block
+                        block__flush-top
+                        block__flush-bottom
+                        block__padded-bottom">
+                {% include_block block %}
+            </div>
+        {% elif block.block_type != 'hero' %}
             {{ render_block.render(block, loop.index) }}
         {% endif %}
     {%- endfor %}

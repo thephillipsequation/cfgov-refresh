@@ -13,6 +13,7 @@ from v1.models.base import CFGOVPage
 class LandingPage(CFGOVPage):
     header = StreamField([
         ('hero', molecules.Hero()),
+        ('notification', molecules.Notification()),
         ('text_introduction', molecules.TextIntroduction()),
     ], blank=True)
 

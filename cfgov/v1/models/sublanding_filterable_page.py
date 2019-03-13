@@ -18,6 +18,7 @@ class SublandingFilterableContent(StreamBlock):
 
     Pages can have at most one filterable list.
     """
+    notification = molecules.Notification()
     text_introduction = molecules.TextIntroduction()
     full_width_text = organisms.FullWidthText()
     filter_controls = organisms.FilterableList()
