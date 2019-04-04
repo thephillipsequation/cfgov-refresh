@@ -25,6 +25,8 @@ from v1.models import (
     CFGOVPage, CFGOVPageManager, LandingPage, PortalCategory, PortalTopic
 )
 from v1.models.snippets import RelatedResource, ReusableText
+from v1.jinja2_environment import environment
+
 
 REUSABLE_TEXT_TITLES = {
     'about_us': {
@@ -76,7 +78,8 @@ def get_ask_nav_items(request, current_page):
 def get_ask_breadcrumbs(language='en', category=None):
     if language == 'es':
         breadcrumbs = [
-            {'title': 'Obtener respuestas', 'href': '/es/obtener-respuestas/'}]
+            {'title': 'Obtener respuestas', 'href': '/es/obtener-respuestas/'}
+        ]
     else:
         breadcrumbs = [{'title': 'Ask CFPB', 'href': '/ask-cfpb/'}]
     if category:
@@ -192,7 +195,8 @@ class AnswerCategoryPage(RoutablePageMixin, SecondaryNavigationJSMixin,
             'get_secondary_nav_items': get_ask_nav_items,
             'breadcrumb_items': get_ask_breadcrumbs(self.language),
             'about_us': get_standard_text(self.language, 'about_us'),
-            'disclaimer': get_standard_text(self.language, 'disclaimer')
+            'disclaimer': get_standard_text(self.language, 'disclaimer'),
+            'gettext': environment.func_globals.get('ugettext'),
         })
         return context
 
