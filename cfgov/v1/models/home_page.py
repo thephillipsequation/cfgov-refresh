@@ -13,7 +13,6 @@ from modelcluster.fields import ParentalKey
 
 from v1.atomic_elements import molecules
 from v1.models.base import CFGOVPage
-from v1.util import ref
 
 
 class HomePage(CFGOVPage):
@@ -51,10 +50,6 @@ class HomePage(CFGOVPage):
     objects = PageManager()
 
     search_fields = CFGOVPage.search_fields + [index.SearchField('header')]
-
-    def get_category_name(self, category_icon_name):
-        cats = dict(ref.limited_categories)
-        return cats[str(category_icon_name)]
 
     def get_context(self, request):
         context = super(HomePage, self).get_context(request)
