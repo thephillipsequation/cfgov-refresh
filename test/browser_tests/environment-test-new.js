@@ -3,7 +3,7 @@ const specsRoot = 'cucumber-new/features/';
 
 module.exports = {
   // A base URL for your application under test.
-  baseUrl: 'http://' + envvars.TEST_HTTP_HOST + ':' + envvars.TEST_HTTP_PORT,
+  baseUrl: `${ envvars.TEST_HTTP_PROTOCOL }://${ envvars.TEST_HTTP_HOST }:${ envvars.TEST_HTTP_PORT }`,
 
   // The base path where the spec suites are located.
   specsBasePath: specsRoot + '**/*',

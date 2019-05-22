@@ -34,12 +34,13 @@ function testA11y() {
  */
 function _getWCAGParams() {
   const commandLineParams = minimist( process.argv.slice( 2 ) );
+  const protocol = envvars.TEST_HTTP_PROTOCOL;
   const host = envvars.TEST_HTTP_HOST;
   const port = envvars.TEST_HTTP_PORT;
   const checkerId = envvars.ACHECKER_ID;
   const urlPath = _parsePath( commandLineParams.u );
-  const url = host + ':' + port + urlPath;
-  fancyLog( `WCAG tests checking URL: http://${ url }` );
+  const url = `${ protocol }://${ host }:${ port }${ urlPath }`;
+  fancyLog( `WCAG tests checking URL: ${ url }` );
 
   return [ `--u=${ url }`, `--id=${ checkerId }` ];
 }
@@ -81,6 +82,7 @@ function testPerf() {
  * @returns {Array} Array of command-line arguments for lighthouse binary.
  */
 function _getLighthouseParams() {
+  const protocol = envvars.TEST_HTTP_PROTOCOL;
   const host = envvars.TEST_HTTP_HOST;
   const port = envvars.TEST_HTTP_PORT;
 
@@ -92,7 +94,7 @@ function _getLighthouseParams() {
   }
 
   return [
-    `http://${ host }:${ port }`,
+    `${ protocol }://${ host }:${ port }`,
     '--chrome-flags=--headless',
     '--output-path=./logs/lighthouse_report.html',
     '--only-categories=performance',

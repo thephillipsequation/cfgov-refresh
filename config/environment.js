@@ -12,8 +12,9 @@ const envvars = {
   /* eslint-disable no-process-env */
   DJANGO_STAGING_HOSTNAME: process.env.DJANGO_STAGING_HOSTNAME,
   NODE_ENV:                process.env.NODE_ENV,
-  TEST_HTTP_HOST:          process.env.TEST_HTTP_HOST,
-  TEST_HTTP_PORT:          process.env.DJANGO_HTTP_PORT,
+  TEST_HTTP_PROTOCOL:      process.env.TEST_HTTP_PROTOCOL || 'http',
+  TEST_HTTP_HOST:          process.env.TEST_HTTP_HOST || 'localhost',
+  TEST_HTTP_PORT:          process.env.DJANGO_HTTP_PORT || process.env.TEST_HTTP_PORT,
   SAUCE_SELENIUM_URL:      process.env.SAUCE_SELENIUM_URL,
   SAUCE_USERNAME:          process.env.SAUCE_USERNAME,
   SAUCE_ACCESS_KEY:        process.env.SAUCE_ACCESS_KEY,
