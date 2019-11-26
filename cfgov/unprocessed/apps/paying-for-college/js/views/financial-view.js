@@ -63,11 +63,9 @@ const financialView = {
     } );
 
     if ( target.matches( '.m-form-field' ) ) {
-      console.log( 'form-field' );
       target.classList.add( 'highlighted' );
       target.querySelector( 'input' ).setAttribute( 'checked', true );
     } else {
-      console.log( 'not form-field' );
       const div = closest( target, '.m-form-field' );
       div.classList.add( 'highlighted' );
       div.querySelector( 'input' ).setAttribute( 'checked', true );
@@ -81,8 +79,6 @@ const financialView = {
     const answer = target.dataset.costs_offerAnswer;
     const offerContent = document.querySelector( '[data-offer-costs-info="' + answer +  '"]' );
     const costsContent = document.getElementById( 'costs_inputs-section' );
-
-    console.log( offerContent );
 
     // TODO - Add state tracking here
 
@@ -137,8 +133,6 @@ const financialView = {
   },
 
   updateFinancialItems: function() {
-    clearTimeout( this._calculatingTimeout );
-
     this._financialItems.forEach( elem => {
 
       if ( !elem.matches( ':focus' ) ) {
@@ -185,7 +179,7 @@ const financialView = {
     */
   initializeFinancialValues: function() {
     this._financialItems.forEach( elem => {
-      createFinancial( elem.dataset.financialItem );
+      createFinancial( elem.dataset.financialItem, 0 );
     } );
   },
 

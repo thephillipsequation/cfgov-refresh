@@ -5,11 +5,12 @@ based on these costs.
 */
 
 import { createFinancials } from '../dispatchers/update-models.js';
+import { getSchoolValue, getConstantsValue } from '../dispatchers/get-model-values.js';
 
 const financialModel = {
   values: {},
 
-  createFinancialProperty: name => {
+  createFinancialProperty: function( name, value ) {
     if ( !financialModel.values.hasOwnProperty( name ) ) {
       financialModel.values[name] = 0;
     }
@@ -80,25 +81,35 @@ const financialModel = {
   },
 
   /**
-      * init - Initialize this model
-      */
+    * Look at the school and constants models and import necesary values.
+    */
+  addSchoolAndConstants: () => {
+    financialModel.values.dirCost_tuition = getSchoolValue( 'tuitionUnderInS' );
+    financialModel.values.dirCost_housing = getSchoolValue( 'roomBrdOnCampus' );
+    financialModel.values.indiCost_books = getSchoolValue( 'books' );
+    financialModel.values.indiCost_other = getSchoolValue( 'otherOnCampus' );
+  },
+
+  /**
+    * init - Initialize this model
+    */
   init: () => {
     // These are test values used only for development purposes.
 
-    financialModel.setValue( 'dirCost_tuition', 45520 );
-    financialModel.setValue( 'dirCost_housing', 3500 );
-    financialModel.setValue( 'indiCost_books', 1100 );
-    financialModel.setValue( 'indiCost_other', 150 );
-    financialModel.setValue( 'grant_state', 1200 );
-    financialModel.setValue( 'grant_pell', 2000 );
-    financialModel.setValue( 'scholarship_state', 1250 );
-    financialModel.setValue( 'scholarship_school', 2550 );
-    financialModel.setValue( 'fedLoan_directSub', 5000 );
-    financialModel.setValue( 'fee_directSub', 0.0108 );
-    financialModel.setValue( 'rate_directSub', 0.0678 );
-    financialModel.setValue( 'fedLoan_directUnsub', 7000 );
-    financialModel.setValue( 'fee_directUnsub', 0.0219 );
-    financialModel.setValue( 'rate_directUnsub', 0.0987 );
+    // financialModel.setValue( 'dirCost_tuition', 45520 );
+    // financialModel.setValue( 'dirCost_housing', 3500 );
+    // financialModel.setValue( 'indiCost_books', 1100 );
+    // financialModel.setValue( 'indiCost_other', 150 );
+    // financialModel.setValue( 'grant_state', 1200 );
+    // financialModel.setValue( 'grant_pell', 2000 );
+    // financialModel.setValue( 'scholarship_state', 1250 );
+    // financialModel.setValue( 'scholarship_school', 2550 );
+    // financialModel.setValue( 'fedLoan_directSub', 5000 );
+    // financialModel.setValue( 'fee_directSub', 0.0108 );
+    // financialModel.setValue( 'rate_directSub', 0.0678 );
+    // financialModel.setValue( 'fedLoan_directUnsub', 7000 );
+    // financialModel.setValue( 'fee_directUnsub', 0.0219 );
+    // financialModel.setValue( 'rate_directUnsub', 0.0987 );
 
     financialModel.calculateTotals();
 
