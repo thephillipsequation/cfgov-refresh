@@ -1,8 +1,5 @@
 """Update college data using the Dept. of Education's collegechoice api"""
-from __future__ import print_function
-
 import datetime
-import json
 import logging
 import os
 import sys
@@ -31,9 +28,9 @@ FIELDSTRING = api_utils.build_field_string()
 def fix_zip5(zip5):
     """add leading zeros if they have been stripped by the scorecard db"""
     if len(zip5) == 4:
-        return "0{0}".format(zip5)
+        return "0{}".format(zip5)
     if len(zip5) == 3:
-        return "00{0}".format(zip5)
+        return "00{}".format(zip5)
     else:
         return zip5[:5]
 
@@ -80,31 +77,30 @@ def update(exclude_ids=[], single_school=None):
 
     exclude_ids += [FAKE_SCHOOL_PK]
     NO_DATA = []  # API failed to respond or provided no data
-    CLOSED = 0  # schools that have closed since our last scrape
+    CLOSED = []  # schools that have closed since our last scrape
     START_MSG = "Requesting latest school data."
     JOB_MSG = (
         "The job is paced to be friendly to the Scorecard API, "
         "so it can take an hour to run.\n"
         "A dot means a school was updated; a dash means no data found.")
-    print(START_MSG)
+    logger.info(START_MSG)
     if not single_school:
-        print(JOB_MSG)
+        logger.info(JOB_MSG)
     STARTER = datetime.datetime.now()
     PROCESSED = 0
     UPDATE_COUNT = 0
-    id_url = "{0}&id={1}&fields={2}"
+    id_url = "{}&id={}&fields={}"
+    base_query = School.objects.exclude(pk__in=exclude_ids)
     if single_school:
-        base_query = School.objects.exclude(
-            pk__in=exclude_ids).filter(pk=single_school)
+        base_query = base_query.filter(pk=single_school)
         logger.info("Updating {}".format(base_query[0]))
     else:
-        base_query = School.objects.filter(
-            operating=True).exclude(pk__in=exclude_ids)
+        base_query = base_query.filter(operating=True)
     for school in base_query:
         UPDATED = False
         PROCESSED += 1
         if PROCESSED % 500 == 0:  # pragma: no cover
-            print("\n{0}\n".format(PROCESSED))
+            logger.info("\n{}\n".format(PROCESSED))
         if PROCESSED % 5 == 0:
             time.sleep(1)
         url = id_url.format(ID_BASE, school.school_id, FIELDSTRING)
@@ -120,7 +116,7 @@ def update(exclude_ids=[], single_school=None):
             if data.get('school.operating') == 0:
                 school.operating = False
                 school.save()
-                CLOSED += 1
+                CLOSED.append(school)
                 continue
             else:
                 data['school.operating'] = True
@@ -152,15 +148,16 @@ def update(exclude_ids=[], single_school=None):
     \n{} took {} to run""".format(
         UPDATE_COUNT,
         len(NO_DATA),
-        CLOSED,
+        len(CLOSED),
         SCRIPTNAME,
         (datetime.datetime.now() - STARTER))
     if NO_DATA:
-        data_note = "\nA list of schools that had no API data was saved to {}"
-        endmsg += data_note.format(NO_DATA_FILE)
-        no_data_dict = {}
+        logger.info("\n\nSchools for which we found no data:")
         for school in NO_DATA:
-            no_data_dict[school.pk] = school.primary_alias
-        with open(NO_DATA_FILE, 'w') as f:
-            f.write(json.dumps(no_data_dict))
+            logger.info("- {} ({})".format(school.primary_alias, school.pk))
+    if CLOSED:
+        logger.info("\n\nSchools that have closed since the last update:")
+        for school in CLOSED:
+            logger.info("- {} ({})".format(school.primary_alias, school.pk))
+
     return (NO_DATA, endmsg)

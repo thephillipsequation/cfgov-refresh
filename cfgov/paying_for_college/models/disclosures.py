@@ -269,8 +269,8 @@ class School(models.Model):
         blank=True, null=True,
         help_text="MEDIAN STUDENT DEBT 10 YRS AFTER ENROLLING")
     median_monthly_debt = models.DecimalField(
-        max_digits=14,
-        decimal_places=9,
+        max_digits=7,
+        decimal_places=2,
         blank=True, null=True,
         help_text=("MEDIAN STUDENT MONTHLY DEBT"))
     median_annual_pay = models.IntegerField(
@@ -385,43 +385,6 @@ class School(models.Model):
                 and self.degrees_highest in HIGHEST_DEGREES):
             highest = HIGHEST_DEGREES[self.degrees_highest]
         return highest
-
-    def get_cohort(self, cohort):
-        """
-        Return a cohort, or list of schools, sharing a characteristic.
-
-        Characteristics are degrees_highest, state, and control.
-        """
-        cohorts = {
-            'degrees_highest': School.objects.filter(
-                degrees_highest=self.degrees_highest).exclude(
-                pk=FAKE_SCHOOL_PK),
-            'state': School.objects.filter(state=self.state),
-            'control': School.objects.filter(control=self.control),
-        }
-        return [school for school in cohorts[cohort]]
-
-    def get_cohort_rank(self, cohort, metric):
-        """
-        Return the current school's rank in a cohort by a given metric.
-
-        Possible metrics are grad_rate, repay_rate and median_total_debt.
-        """
-        schools = self.get_cohort(cohort)
-        indexes = {
-            'grad_rate': sorted(
-                [s for s in schools if s.grad_rate],
-                key=lambda school: school.grad_rate),
-            'repay_rate': sorted(
-                [s for s in schools if s.repay_3yr],
-                key=lambda school: school.repay_3yr),
-            'median_total_debt': sorted(
-                [s for s in schools if s.median_total_debt],
-                key=lambda school: school.median_total_debt)
-        }
-        rank_list = indexes[metric]
-        # TODO: This will deliver a school's rank in the next iteration.
-        return rank_list
 
     def convert_ope6(self):
         if self.ope6_id:
