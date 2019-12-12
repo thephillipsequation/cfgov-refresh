@@ -1,5 +1,6 @@
 # flake8: noqa F401
 
+from paying_for_college import PFC_ROOT
 from paying_for_college.models.disclosures import (
     CONTROL_MAP, FAKE_SCHOOL_PK, HIGHEST_DEGREES, LEVELS,
     NOTIFICATION_TEMPLATE, REGION_MAP, REGION_NAMES, Alias, ConstantCap,

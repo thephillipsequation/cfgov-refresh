@@ -14,6 +14,7 @@ from django.db import connection
 from django.utils import timezone
 
 import requests
+from paying_for_college import PFC_ROOT
 from paying_for_college.disclosures.scripts import (
     api_utils, nat_stats, notifications, process_cohorts, purge_objects,
     tag_settlement_schools, update_colleges, update_ipeds
@@ -35,7 +36,6 @@ else:  # pragma: no cover
     from unittest.mock import mock_open, patch
 
 
-COLLEGE_ROOT = "{}/paying_for_college".format(settings.PROJECT_ROOT)
 os.path.join(os.path.dirname(__file__), '../..')
 MOCK_YAML = """\
 completion_rate:\n\
@@ -102,7 +102,7 @@ class PurgeTests(django.test.TestCase):
 class TestScripts(django.test.TestCase):
 
     fixtures = ['test_fixture.json']
-    api_fixture = '{}/fixtures/sample_4yr_api_result.json'.format(COLLEGE_ROOT)
+    api_fixture = '{}/fixtures/sample_4yr_api_result.json'.format( PFC_ROOT)
 
     # a full sample API return for a 4-year school (Texas Tech 229115)
     with open(api_fixture, 'r') as f:
@@ -410,7 +410,7 @@ class TestScripts(django.test.TestCase):
 
     def test_unzip_file(self):
         test_zip = ('{}/data_sources/ipeds/'
-                    'test.txt.zip'.format(COLLEGE_ROOT))
+                    'test.txt.zip'.format( PFC_ROOT))
         self.assertTrue(update_ipeds.unzip_file(test_zip))
 
     @patch('paying_for_college.disclosures.scripts.update_ipeds.requests.get')
