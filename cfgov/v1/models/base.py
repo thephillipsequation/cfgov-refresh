@@ -87,6 +87,11 @@ class CFGOVPage(Page):
         index.SearchField('sidefoot'),
     ]
 
+    api_fields = [
+        'tags',
+        'language',
+    ]
+
     # These fields show up in either the sidebar or the footer of the page
     # depending on the page type.
     sidefoot = StreamField([

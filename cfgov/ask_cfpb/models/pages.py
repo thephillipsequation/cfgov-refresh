@@ -562,6 +562,18 @@ class AnswerPage(CFGOVPage):
         PortalCategory,
         blank=True)
 
+    api_fields = [
+        'question',
+        'statement',
+        'search_tags',
+        'short_answer',
+        'answer_content',
+
+        # fields inherited from CFGOVPage
+        'tags',
+        'language',
+    ]
+
     user_feedback = StreamField([
         ('feedback', v1_blocks.Feedback()),
     ], blank=True)

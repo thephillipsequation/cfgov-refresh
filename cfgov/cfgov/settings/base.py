@@ -56,6 +56,9 @@ INSTALLED_APPS = (
     'wagtail.contrib.table_block',
     'wagtail.contrib.wagtailroutablepage',
 
+    'wagtail.api.v2',
+    'rest_framework',
+
     'localflavor',
     'modelcluster',
     'taggit',
@@ -842,7 +845,9 @@ PARSE_LINKS_EXCLUSION_LIST = [
     # Our custom login pages
     r'^/login/',
     # Regulations pages that have their own link markup
-    r'^/policy-compliance/rulemaking/regulations/\d+/'
+    r'^/policy-compliance/rulemaking/regulations/\d+/',
+    # API pages using rest_framework have their own styles
+    r'^/api/v2/',
 ]
 
 # Required by django-extensions to determine the execution directory used by

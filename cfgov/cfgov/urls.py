@@ -14,6 +14,7 @@ from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtailsharing import urls as wagtailsharing_urls
 from wagtailsharing.views import ServeView
 
+from api import api_router
 from flags.urls import flagged_url
 from flags.views import FlaggedTemplateView
 from wagtailautocomplete.urls.admin import (
@@ -527,6 +528,10 @@ category_redirects = [
             permanent=True))
 ]
 urlpatterns = urlpatterns + category_redirects
+
+if settings.ENABLE_WAGTAIL_API:
+    api_pattern = url(r'^api/v2/', api_router.urls)
+    urlpatterns.append(api_pattern)
 
 if settings.ALLOW_ADMIN_URL:
     patterns = [

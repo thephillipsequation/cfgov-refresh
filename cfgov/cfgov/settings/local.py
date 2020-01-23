@@ -26,6 +26,8 @@ STATIC_ROOT = REPOSITORY_ROOT.child('collectstatic')
 
 ALLOW_ADMIN_URL = DEBUG or os.environ.get('ALLOW_ADMIN_URL', False)
 
+ENABLE_WAGTAIL_API = True
+
 
 LOGGING = {
     'version': 1,
