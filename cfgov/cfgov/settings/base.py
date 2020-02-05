@@ -752,6 +752,11 @@ FLAGS = {
         # Boolean to turn it off explicitly unless enabled by another condition
         {'condition': 'boolean', 'value': False}
     ],
+
+    'ENABLE_WAGTAIL_API': [
+        {'condition': 'environment is', 'value': 'staging'},
+        {'condition': 'environment is', 'value': 'local'},
+    ],
 }
 
 

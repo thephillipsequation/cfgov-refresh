@@ -15,6 +15,7 @@ from wagtailsharing import urls as wagtailsharing_urls
 from wagtailsharing.views import ServeView
 
 from api import api_router
+from flags.state import flag_enabled
 from flags.urls import flagged_url
 from flags.views import FlaggedTemplateView
 from wagtailautocomplete.urls.admin import (
@@ -529,7 +530,7 @@ category_redirects = [
 ]
 urlpatterns = urlpatterns + category_redirects
 
-if settings.ENABLE_WAGTAIL_API:
+if flag_enabled('ENABLE_WAGTAIL_API'):
     api_pattern = url(r'^api/v2/', api_router.urls)
     urlpatterns.append(api_pattern)
 
