@@ -754,8 +754,7 @@ FLAGS = {
     ],
 
     'ENABLE_WAGTAIL_API': [
-        {'condition': 'environment is', 'value': 'staging'},
-        {'condition': 'environment is', 'value': 'local'},
+        {'condition': 'environment is not', 'value': 'production'},
     ],
 }
 
