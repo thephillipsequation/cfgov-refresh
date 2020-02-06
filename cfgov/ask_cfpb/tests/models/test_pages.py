@@ -1111,3 +1111,15 @@ class AnswerPageTestCase(TestCase):
                 FLAGS={'HOW_TO_SCHEMA': [('boolean', True)]}):
             response = self.client.get(self.page1.url)
             self.assertContains(response, 'itemtype="http://schema.org/HowTo"')
+
+    def test_api_exposes_correct_fields(self):
+        page2id = self.page2.id
+        response = self.client.get(f'/api/v2/pages/{page2id}/')
+        keys = response.json().keys()
+        self.assertIn('question', keys)
+        self.assertIn('statement', keys)
+        self.assertIn('search_tags', keys)
+        self.assertIn('short_answer', keys)
+        self.assertIn('answer_content', keys)
+        self.assertIn('tags', keys)
+        self.assertIn('language', keys)
