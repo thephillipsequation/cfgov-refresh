@@ -1153,3 +1153,10 @@ class DataSnapshot(blocks.StructBlock):
         icon = 'image'
         label = 'CCT Data Snapshot'
         template = '_includes/organisms/data_snapshot.html'
+
+
+# not sure whether we want Banner to be an Organism or a normal model. Evidently my branch has both.
+class Banner(molecules.Notification):
+    url_patterns = blocks.CharBlock(help_text='a regex pattern for which pages should show the banner')
+
+
